@@ -6,13 +6,13 @@
 #    By: blevrel <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/21 10:32:08 by blevrel           #+#    #+#              #
-#    Updated: 2022/06/27 13:19:24 by blevrel          ###   ########.fr        #
+#    Updated: 2022/07/21 10:20:50 by blevrel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
-SRCS =	srcs/test_multithreading.c
+SRCS =	srcs/philosophers.c srcs/philosophers_utils.c
 
 OBJS = ${SRCS:.c=.o}
 
