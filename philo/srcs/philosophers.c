@@ -6,7 +6,7 @@
 /*   By: blevrel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 08:50:41 by blevrel           #+#    #+#             */
-/*   Updated: 2022/07/31 14:04:28 by blevrel          ###   ########.fr       */
+/*   Updated: 2022/08/04 17:43:25 by blevrel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -61,9 +61,17 @@ long long	*char_tab_to_int_tab(char **args, int nb_args, int i)
 int	main(int argc, char **argv)
 {
 	long long		*args;
-	t_all_philos	philos_data;
+	t_indiv_data	*philos_data;
 
-	gettimeofday(&philos_data.start, NULL);
+	if (argc != 5 && argc != 6)
+	{
+		printf("Error\nArguments must be : number_of_philosophers, ");
+		printf("time_to_die, time_to_eat, time_to_sleep, ");
+		printf("[number_of_times_each_philosopher_must_eat] (optional)\n");
+		return (-1);
+	}
+	philos_data = malloc(sizeof(t_indiv_data) * ft_atol(argv[1]));
+	gettimeofday(&philos_data->time.start, NULL);
 	if (argc == 5)
 	{
 		args = verify_args(argc, argv);
@@ -73,13 +81,6 @@ int	main(int argc, char **argv)
 	{
 		args = verify_args(argc, argv);
 		start_threads(args, argc - 1, philos_data);
-	}
-	else
-	{
-		printf("Error\nArguments must be : number_of_philosophers, ");
-		printf("time_to_die, time_to_eat, time_to_sleep, ");
-		printf("[number_of_times_each_philosopher_must_eat] (optional)\n");
-		return (-1);
 	}
 	return (0);
 }
