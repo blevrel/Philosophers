@@ -6,7 +6,7 @@
 /*   By: blevrel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 17:38:49 by blevrel           #+#    #+#             */
-/*   Updated: 2022/08/05 17:18:08 by blevrel          ###   ########.fr       */
+/*   Updated: 2022/08/06 14:34:34 by blevrel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PHILOSOPHERS_H
@@ -22,6 +22,7 @@ typedef struct s_time
 {
 	struct timeval	start;
 	struct timeval	end;
+	struct timeval	last_meal;
 	int				time_elapsed;
 }				t_time;
 
@@ -55,5 +56,6 @@ void		init_struc(t_indiv_data *philos_data, long long *args);
 void		*start_routine(void *received_args);
 void		start_simulation(t_indiv_data *philos_data);
 void		get_time_and_print_it(t_indiv_data *philos_data);
+int			check_death(t_indiv_data *philos_data);
 
 #endif
