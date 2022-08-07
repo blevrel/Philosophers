@@ -6,7 +6,7 @@
 /*   By: blevrel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 17:38:49 by blevrel           #+#    #+#             */
-/*   Updated: 2022/08/06 14:34:34 by blevrel          ###   ########.fr       */
+/*   Updated: 2022/08/07 10:26:52 by blevrel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PHILOSOPHERS_H
@@ -37,7 +37,7 @@ typedef struct s_all_philos
 
 typedef struct s_indiv_data
 {
-	int				nb_of_times_ate;
+	int				nb_of_meals;
 	int				time_alive;
 	int				philo_id;
 	int				own_fork;
@@ -57,5 +57,6 @@ void		*start_routine(void *received_args);
 void		start_simulation(t_indiv_data *philos_data);
 void		get_time_and_print_it(t_indiv_data *philos_data);
 int			check_death(t_indiv_data *philos_data);
+int			check_nb_of_meals(t_indiv_data *philos_data);
 
 #endif

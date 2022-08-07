@@ -6,7 +6,7 @@
 /*   By: blevrel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 11:45:11 by blevrel           #+#    #+#             */
-/*   Updated: 2022/08/06 14:46:29 by blevrel          ###   ########.fr       */
+/*   Updated: 2022/08/07 12:07:15 by blevrel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -17,7 +17,6 @@ void	*start_routine(void *received_args)
 
 	philos_data = (t_indiv_data *) received_args;
 	start_simulation(&philos_data[0]);
-	free(philos_data->fork);
 	return (NULL);
 }
 
@@ -32,8 +31,7 @@ void	init_struc(t_indiv_data *philos_data, long long *args)
 		philos_data[i].global_data.time_to_die = args[1];
 		philos_data[i].global_data.time_to_eat = args[2];
 		philos_data[i].global_data.time_to_sleep = args[3];
-		philos_data[i].global_data.nb_of_times_philo_must_eat = 0;
-		philos_data[i].nb_of_times_ate = 0;
+		philos_data[i].nb_of_meals = 0;
 		philos_data[i].time_alive = 0;
 		philos_data[i].philo_id = i + 1;
 		philos_data[i].own_fork = 0;
@@ -45,41 +43,54 @@ void	init_struc(t_indiv_data *philos_data, long long *args)
 	}
 }
 
+void	free_forks(t_indiv_data *philos_data)
+{
+	int	i;
+
+	i = 0;
+	while (i < philos_data->global_data.nb_of_philosophers)
+	{
+		free(philos_data[i].fork);
+		i++;
+	}
+}
+
 void	start_threads(long long *args, int nb_args, t_indiv_data *philos_data)
 {
-	pthread_t		*id;
+	pthread_t		id[args[0]];
 	int				i;
 	int				trigger;
 
 	trigger = 0;
 	i = 0;
-	id = malloc(sizeof(pthread_t) * philos_data[0].global_data
-			.nb_of_philosophers);
 	init_struc(philos_data, args);
 	if (nb_args == 5)
 	{
 		if (trigger == 0)
 		{
-			while (i++ < philos_data[0].global_data.nb_of_philosophers)
+			while (i < philos_data->global_data.nb_of_philosophers)
+			{
 				philos_data[i].global_data.nb_of_times_philo_must_eat = args[4];
+				i++;
+			}
 			trigger = 1;
 			i = 0;
 		}
 	}
 	free(args);
-	while (i < philos_data[0].global_data.nb_of_philosophers)
+	while (i < philos_data->global_data.nb_of_philosophers)
 	{
 		pthread_create(&id[i], NULL, &start_routine, (void *)&philos_data[i]);
 		usleep(100);
 		i++;
 	}
 	i = 0;
-	while (i < philos_data[0].global_data.nb_of_philosophers)
+	while (i < philos_data->global_data.nb_of_philosophers)
 	{
 		pthread_join(id[i], NULL);
 		i++;
 	}
 	pthread_join(*id, NULL);
-	free(philos_data);
-	free(id);
+	free_forks(philos_data);
+	//free(philos_data);
 }

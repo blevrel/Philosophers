@@ -6,7 +6,7 @@
 /*   By: blevrel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 08:50:41 by blevrel           #+#    #+#             */
-/*   Updated: 2022/08/06 14:07:07 by blevrel          ###   ########.fr       */
+/*   Updated: 2022/08/07 12:03:53 by blevrel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -66,14 +66,18 @@ void	init_time_structure(t_indiv_data *philos_data, long long nb_philos)
 	i = 0;
 	j = 0;
 	gettimeofday(&philos_data[j].time.start, NULL);
+	gettimeofday(&philos_data[j].time.last_meal, NULL);
 	while (++i < nb_philos)
+	{
 		philos_data[i].time.start = philos_data[j].time.start;
+		philos_data[i].time.last_meal = philos_data[j].time.start;
+	}
 }
 
 int	main(int argc, char **argv)
 {
 	long long		*args;
-	t_indiv_data	*philos_data;
+	t_indiv_data	philos_data[ft_atol(argv[1])];
 
 	if (argc != 5 && argc != 6)
 	{
@@ -82,7 +86,7 @@ int	main(int argc, char **argv)
 		printf("[number_of_times_each_philosopher_must_eat] (optional)\n");
 		return (-1);
 	}
-	philos_data = malloc(sizeof(t_indiv_data) * ft_atol(argv[1]));
+	//philos_data = malloc(sizeof(t_indiv_data) * ft_atol(argv[1]));
 	init_time_structure(philos_data, ft_atol(argv[1]));
 	if (argc == 5)
 	{
