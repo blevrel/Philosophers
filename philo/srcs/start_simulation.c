@@ -6,84 +6,84 @@
 /*   By: blevrel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 12:04:00 by blevrel           #+#    #+#             */
-/*   Updated: 2022/08/07 11:27:11 by blevrel          ###   ########.fr       */
+/*   Updated: 2022/08/09 17:10:19 by blevrel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
 
-void	take_forks(t_indiv_data *philos_data)
+int	take_forks(t_indiv_data *philos_data)
 {
-	while (philos_data->own_fork != 1
-		&& philos_data->neighbour_fork != 1)
+	while (philos_data->own_fork != 1 && philos_data->neighbour_fork != 1)
 	{
-		if (pthread_mutex_lock(philos_data->fork) == 0)
+		if (pthread_mutex_lock(&philos_data->fork) == 0)
 		{
 			philos_data->own_fork = 1;
-			get_time_and_print_it(philos_data);
-			printf("%d has taken a fork\n", philos_data->philo_id);
+			if (print_message(philos_data, FORK) == 1)
+				return (1);
 		}
 		if (philos_data->philo_id
 			!= philos_data->global_data.nb_of_philosophers
-			&& pthread_mutex_lock(philos_data[1].fork) == 0)
+			&& pthread_mutex_lock(&philos_data[1].fork) == 0)
 		{
 			philos_data->neighbour_fork = 1;
-			get_time_and_print_it(philos_data);
-			printf("%d has taken a fork\n", philos_data->philo_id);
+			if (print_message(philos_data, FORK) == 1)
+				return (1);
 		}
-		else if (pthread_mutex_lock(philos_data[0 - (philos_data->global_data
+		else if (pthread_mutex_lock(&philos_data[0 - (philos_data->global_data
 						.nb_of_philosophers - 1)].fork) == 0)
 		{
 			philos_data->neighbour_fork = 1;
-			get_time_and_print_it(philos_data);
-			printf("%d has taken a fork\n", philos_data->philo_id);
+			if (print_message(philos_data, FORK) == 1)
+				return (1);
 		}
 	}
+	return (0);
 }
 
-void	eat_and_drop_forks(t_indiv_data *philos_data)
+int	eat_and_drop_forks(t_indiv_data *philos_data)
 {
-	get_time_and_print_it(philos_data);
-	printf("%d is eating\n", philos_data->philo_id);
+	if (print_message(philos_data, EAT) == 1)
+		return (1);
 	usleep(philos_data->global_data.time_to_eat * 1000);
 	gettimeofday(&philos_data->time.last_meal, NULL);
-	pthread_mutex_unlock(philos_data->fork);
+	pthread_mutex_unlock(&philos_data->fork);
 	if (philos_data->philo_id
 		!= philos_data->global_data.nb_of_philosophers)
-		pthread_mutex_unlock(philos_data[1].fork);
+		pthread_mutex_unlock(&philos_data[1].fork);
 	else
-		pthread_mutex_unlock(philos_data[0 - (philos_data->global_data
+		pthread_mutex_unlock(&philos_data[0 - (philos_data->global_data
 				.nb_of_philosophers - 1)].fork);
 	philos_data->nb_of_meals++;
 	philos_data->own_fork = 0;
 	philos_data->neighbour_fork = 0;
-	if (check_nb_of_meals(philos_data) == 1)
-		pthread_exit(NULL);
+	if (philos_data->global_data.nb_of_times_philo_must_eat != 0
+		&& check_nb_of_meals(philos_data) == 1)
+		return (1);
+	return (0);
 }
 
-void	ft_sleep(t_indiv_data *philos_data)
+int	ft_sleep(t_indiv_data *philos_data)
 {
-	get_time_and_print_it(philos_data);
-	printf("%d is sleeping\n", philos_data->philo_id);
+	if (print_message(philos_data, SLEEP) == 1)
+		return (1);
 	usleep(philos_data->global_data.time_to_sleep * 1000);
-	get_time_and_print_it(philos_data);
-	printf("%d is thinking\n", philos_data->philo_id);
+	if (print_message(philos_data, THINK) == 1)
+		return (1);
+	return (0);
 }
 
 void	start_simulation(t_indiv_data *philos_data)
 {
 	while (1)
 	{
-		if (check_death(philos_data) == 1)
+		if (take_forks(philos_data) == 1)
+			return ;
+		if (philos_data->own_fork == 1 && philos_data->neighbour_fork == 1)
 		{
-			printf("%d died\n", philos_data->philo_id);
-			exit(-1);
-		}
-		take_forks(philos_data);
-		if (philos_data->own_fork == 1
-			&& philos_data->neighbour_fork == 1)
-		{
-			eat_and_drop_forks(philos_data);
-			ft_sleep(philos_data);
+			if (eat_and_drop_forks(philos_data) == 1)
+				return ;
+			if (ft_sleep(philos_data) == 1)
+				return ;
 		}
 	}
 }

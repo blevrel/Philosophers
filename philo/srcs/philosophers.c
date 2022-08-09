@@ -6,7 +6,7 @@
 /*   By: blevrel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 08:50:41 by blevrel           #+#    #+#             */
-/*   Updated: 2022/08/07 12:03:53 by blevrel          ###   ########.fr       */
+/*   Updated: 2022/08/09 09:25:19 by blevrel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -86,7 +86,6 @@ int	main(int argc, char **argv)
 		printf("[number_of_times_each_philosopher_must_eat] (optional)\n");
 		return (-1);
 	}
-	//philos_data = malloc(sizeof(t_indiv_data) * ft_atol(argv[1]));
 	init_time_structure(philos_data, ft_atol(argv[1]));
 	if (argc == 5)
 	{

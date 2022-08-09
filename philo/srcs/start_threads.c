@@ -6,7 +6,7 @@
 /*   By: blevrel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 11:45:11 by blevrel           #+#    #+#             */
-/*   Updated: 2022/08/07 12:07:15 by blevrel          ###   ########.fr       */
+/*   Updated: 2022/08/09 16:37:54 by blevrel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -16,7 +16,7 @@ void	*start_routine(void *received_args)
 	t_indiv_data	*philos_data;
 
 	philos_data = (t_indiv_data *) received_args;
-	start_simulation(&philos_data[0]);
+	start_simulation(philos_data);
 	return (NULL);
 }
 
@@ -25,32 +25,21 @@ void	init_struc(t_indiv_data *philos_data, long long *args)
 	int	i;
 
 	i = 0;
+	pthread_mutex_init(&philos_data[0].global_data.msg_mutex, NULL);
 	while (i < args[0])
 	{
 		philos_data[i].global_data.nb_of_philosophers = args[0];
 		philos_data[i].global_data.time_to_die = args[1];
 		philos_data[i].global_data.time_to_eat = args[2];
 		philos_data[i].global_data.time_to_sleep = args[3];
+		philos_data[i].global_data.nb_of_times_philo_must_eat = 0;
 		philos_data[i].nb_of_meals = 0;
 		philos_data[i].time_alive = 0;
 		philos_data[i].philo_id = i + 1;
 		philos_data[i].own_fork = 0;
 		philos_data[i].neighbour_fork = 0;
 		philos_data[i].time.time_elapsed = 0;
-		philos_data[i].fork = malloc(sizeof(pthread_mutex_t));
-		pthread_mutex_init(philos_data[i].fork, NULL);
-		i++;
-	}
-}
-
-void	free_forks(t_indiv_data *philos_data)
-{
-	int	i;
-
-	i = 0;
-	while (i < philos_data->global_data.nb_of_philosophers)
-	{
-		free(philos_data[i].fork);
+		pthread_mutex_init(&philos_data[i].fork, NULL);
 		i++;
 	}
 }
@@ -90,7 +79,4 @@ void	start_threads(long long *args, int nb_args, t_indiv_data *philos_data)
 		pthread_join(id[i], NULL);
 		i++;
 	}
-	pthread_join(*id, NULL);
-	free_forks(philos_data);
-	//free(philos_data);
 }

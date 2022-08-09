@@ -6,7 +6,7 @@
 #    By: blevrel <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/21 10:32:08 by blevrel           #+#    #+#              #
-#    Updated: 2022/08/07 10:27:13 by blevrel          ###   ########.fr        #
+#    Updated: 2022/08/09 10:27:37 by blevrel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ SRCS =	srcs/philosophers.c \
 		srcs/get_time.c \
 		srcs/check_death.c \
 		srcs/check_nb_of_meals.c \
+		srcs/print_message.c \
 
 OBJS = ${SRCS:.c=.o}
 
