@@ -6,7 +6,7 @@
 /*   By: blevrel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 10:13:13 by blevrel           #+#    #+#             */
-/*   Updated: 2022/07/28 11:18:22 by blevrel          ###   ########.fr       */
+/*   Updated: 2022/08/10 11:16:31 by blevrel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -59,6 +59,34 @@ int	ft_isint(long long nb)
 {
 	if (nb > 2147483647 || nb < -2147483648)
 		return (1);
+	if (nb == 0)
+		return (1);
 	else
 		return (0);
+}
+
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
+void	ft_putnbr(int nb)
+{
+	if (nb == -2147483648)
+	{
+		write(1, "-2147483648", 11);
+		return ;
+	}
+	if (nb < 0)
+	{
+		nb = -nb;
+		ft_putchar('-');
+	}
+	if (nb >= 10)
+	{
+		ft_putnbr(nb / 10);
+		ft_putnbr(nb % 10);
+	}
+	else
+		ft_putchar(nb + '0');
 }

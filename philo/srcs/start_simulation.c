@@ -6,7 +6,7 @@
 /*   By: blevrel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 12:04:00 by blevrel           #+#    #+#             */
-/*   Updated: 2022/08/09 17:10:19 by blevrel          ###   ########.fr       */
+/*   Updated: 2022/08/11 16:22:38 by blevrel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -20,6 +20,8 @@ int	take_forks(t_indiv_data *philos_data)
 			philos_data->own_fork = 1;
 			if (print_message(philos_data, FORK) == 1)
 				return (1);
+			if (philos_data->global_data.nb_of_philosophers == 1)
+				return (one_philo(philos_data));
 		}
 		if (philos_data->philo_id
 			!= philos_data->global_data.nb_of_philosophers

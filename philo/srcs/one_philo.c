@@ -1,24 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_time.c                                         :+:      :+:    :+:   */
+/*   one_philo.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: blevrel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/31 13:55:34 by blevrel           #+#    #+#             */
-/*   Updated: 2022/08/10 12:01:44 by blevrel          ###   ########.fr       */
+/*   Created: 2022/08/11 16:21:29 by blevrel           #+#    #+#             */
+/*   Updated: 2022/08/11 16:22:29 by blevrel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
 
-void	get_time_and_print_it(t_indiv_data *philos_data)
+int	one_philo(t_indiv_data *philos_data)
 {
-	gettimeofday(&philos_data->time.end, NULL);
-	philos_data->time.time_elapsed
-		= ((philos_data->time.end.tv_sec
-				- philos_data->time.start.tv_sec) * 1000000
-			+ (philos_data->time.end.tv_usec
-				- philos_data->time.start.tv_usec)) / 1000;
-	printf("%d : ", philos_data->time.time_elapsed);
+	usleep(philos_data->global_data.time_to_die * 1000);
+	pthread_mutex_unlock(&philos_data->fork);
+	get_time_and_print_it(philos_data);
+	printf("%d has died\n", philos_data->philo_id);
+	return (1);
 }
-//faire lacher la fourchette avant de quitter le thread

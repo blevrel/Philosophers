@@ -6,7 +6,7 @@
 /*   By: blevrel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 11:45:11 by blevrel           #+#    #+#             */
-/*   Updated: 2022/08/09 16:37:54 by blevrel          ###   ########.fr       */
+/*   Updated: 2022/08/11 16:18:16 by blevrel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -46,12 +46,13 @@ void	init_struc(t_indiv_data *philos_data, long long *args)
 
 void	start_threads(long long *args, int nb_args, t_indiv_data *philos_data)
 {
-	pthread_t		id[args[0]];
+	pthread_t		*id;
 	int				i;
 	int				trigger;
 
 	trigger = 0;
 	i = 0;
+	id = malloc(sizeof(pthread_t) * args[0]);
 	init_struc(philos_data, args);
 	if (nb_args == 5)
 	{
@@ -79,4 +80,5 @@ void	start_threads(long long *args, int nb_args, t_indiv_data *philos_data)
 		pthread_join(id[i], NULL);
 		i++;
 	}
+	free(id);
 }

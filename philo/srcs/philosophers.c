@@ -6,7 +6,7 @@
 /*   By: blevrel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 08:50:41 by blevrel           #+#    #+#             */
-/*   Updated: 2022/08/09 09:25:19 by blevrel          ###   ########.fr       */
+/*   Updated: 2022/08/10 10:24:18 by blevrel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -20,11 +20,11 @@ long long	*verify_args(int nb_args, char **args)
 	while (i < nb_args)
 	{
 		if (ft_str_is_numeric(args[i]) == 0)
-			exit(write(2, "Argument is not a number\n", 25));
+			return (print_error_msg(NOT_NUM));
 		else if (ft_str_is_numeric(args[i]) == -1)
-			exit(write(2, "Argument can't be negative\n", 27));
+			return (print_error_msg(NEG));
 		else if (args[i][0] == '\0')
-			exit(write(2, "Empty string is not a valid argument\n", 37));
+			return (print_error_msg(EMPTY));
 		i++;
 	}
 	i = 1;
@@ -50,7 +50,7 @@ long long	*char_tab_to_int_tab(char **args, int nb_args, int i)
 		else
 		{
 			free(tab);
-			exit(write(2, "Incorrect argument value\n", 25));
+			return (print_error_msg(NOT_VALID));
 		}
 		i++;
 		j++;
@@ -77,25 +77,22 @@ void	init_time_structure(t_indiv_data *philos_data, long long nb_philos)
 int	main(int argc, char **argv)
 {
 	long long		*args;
-	t_indiv_data	philos_data[ft_atol(argv[1])];
+	t_indiv_data	*philos_data;
 
 	if (argc != 5 && argc != 6)
 	{
-		printf("Error\nArguments must be : number_of_philosophers, ");
-		printf("time_to_die, time_to_eat, time_to_sleep, ");
-		printf("[number_of_times_each_philosopher_must_eat] (optional)\n");
+		print_error_msg(ARGC);
 		return (-1);
 	}
-	init_time_structure(philos_data, ft_atol(argv[1]));
-	if (argc == 5)
+	philos_data = malloc(sizeof(t_indiv_data) * ft_atol(argv[1]));
+	args = verify_args(argc, argv);
+	if (args == NULL)
 	{
-		args = verify_args(argc, argv);
-		start_threads(args, argc - 1, philos_data);
+		free(philos_data);
+		return (-1);
 	}
-	else if (argc == 6)
-	{
-		args = verify_args(argc, argv);
-		start_threads(args, argc - 1, philos_data);
-	}
+	init_time_structure(philos_data, args[0]);
+	start_threads(args, argc - 1, philos_data);
+	free(philos_data);
 	return (0);
 }

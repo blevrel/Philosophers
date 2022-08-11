@@ -6,7 +6,7 @@
 /*   By: blevrel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 17:38:49 by blevrel           #+#    #+#             */
-/*   Updated: 2022/08/09 16:35:37 by blevrel          ###   ########.fr       */
+/*   Updated: 2022/08/11 16:24:03 by blevrel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PHILOSOPHERS_H
@@ -21,6 +21,11 @@
 # define EAT 2
 # define SLEEP 3
 # define THINK 4
+# define NEG 1
+# define NOT_NUM 2
+# define EMPTY 3
+# define ARGC 4
+# define NOT_VALID 5
 
 typedef struct s_time
 {
@@ -56,7 +61,8 @@ int			ft_str_is_numeric(char *str);
 long long	ft_atol(const char *nptr);
 int			ft_isint(long long nb);
 long long	*char_tab_to_int_tab(char **args, int nb_args, int i);
-void		start_threads(long long *args, int nb_args, t_indiv_data *philos_data);
+void		start_threads(long long *args, int nb_args,
+				t_indiv_data *philos_data);
 void		init_struc(t_indiv_data *philos_data, long long *args);
 void		*start_routine(void *received_args);
 void		start_simulation(t_indiv_data *philos_data);
@@ -64,5 +70,7 @@ void		get_time_and_print_it(t_indiv_data *philos_data);
 int			check_death(t_indiv_data *philos_data);
 int			check_nb_of_meals(t_indiv_data *philos_data);
 int			print_message(t_indiv_data *philos_data, int msg_to_print);
+void		*print_error_msg(int msg_code);
+int			one_philo(t_indiv_data *philos_data);
 
 #endif
