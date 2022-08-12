@@ -6,7 +6,7 @@
 /*   By: blevrel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 08:50:41 by blevrel           #+#    #+#             */
-/*   Updated: 2022/08/10 10:24:18 by blevrel          ###   ########.fr       */
+/*   Updated: 2022/08/12 14:41:56 by blevrel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -85,6 +85,8 @@ int	main(int argc, char **argv)
 		return (-1);
 	}
 	philos_data = malloc(sizeof(t_indiv_data) * ft_atol(argv[1]));
+	if (philos_data == NULL)
+		return (-1);
 	args = verify_args(argc, argv);
 	if (args == NULL)
 	{

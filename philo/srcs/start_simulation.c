@@ -6,7 +6,7 @@
 /*   By: blevrel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 12:04:00 by blevrel           #+#    #+#             */
-/*   Updated: 2022/08/11 16:22:38 by blevrel          ###   ########.fr       */
+/*   Updated: 2022/08/12 18:10:24 by blevrel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -18,7 +18,7 @@ int	take_forks(t_indiv_data *philos_data)
 		if (pthread_mutex_lock(&philos_data->fork) == 0)
 		{
 			philos_data->own_fork = 1;
-			if (print_message(philos_data, FORK) == 1)
+			if (check_death_and_print_message(philos_data, FORK) == 1)
 				return (1);
 			if (philos_data->global_data.nb_of_philosophers == 1)
 				return (one_philo(philos_data));
@@ -28,14 +28,14 @@ int	take_forks(t_indiv_data *philos_data)
 			&& pthread_mutex_lock(&philos_data[1].fork) == 0)
 		{
 			philos_data->neighbour_fork = 1;
-			if (print_message(philos_data, FORK) == 1)
+			if (check_death_and_print_message(philos_data, FORK) == 1)
 				return (1);
 		}
 		else if (pthread_mutex_lock(&philos_data[0 - (philos_data->global_data
 						.nb_of_philosophers - 1)].fork) == 0)
 		{
 			philos_data->neighbour_fork = 1;
-			if (print_message(philos_data, FORK) == 1)
+			if (check_death_and_print_message(philos_data, FORK) == 1)
 				return (1);
 		}
 	}
@@ -44,10 +44,14 @@ int	take_forks(t_indiv_data *philos_data)
 
 int	eat_and_drop_forks(t_indiv_data *philos_data)
 {
-	if (print_message(philos_data, EAT) == 1)
+	if (check_death_and_print_message(philos_data, EAT) == 1)
 		return (1);
 	usleep(philos_data->global_data.time_to_eat * 1000);
+	pthread_mutex_lock(&philos_data[0 - (philos_data->philo_id - 1)]
+		.global_data.time_mutex);
 	gettimeofday(&philos_data->time.last_meal, NULL);
+	pthread_mutex_unlock(&philos_data[0 - (philos_data->philo_id - 1)]
+		.global_data.time_mutex);
 	pthread_mutex_unlock(&philos_data->fork);
 	if (philos_data->philo_id
 		!= philos_data->global_data.nb_of_philosophers)
@@ -66,10 +70,10 @@ int	eat_and_drop_forks(t_indiv_data *philos_data)
 
 int	ft_sleep(t_indiv_data *philos_data)
 {
-	if (print_message(philos_data, SLEEP) == 1)
+	if (check_death_and_print_message(philos_data, SLEEP) == 1)
 		return (1);
 	usleep(philos_data->global_data.time_to_sleep * 1000);
-	if (print_message(philos_data, THINK) == 1)
+	if (check_death_and_print_message(philos_data, THINK) == 1)
 		return (1);
 	return (0);
 }

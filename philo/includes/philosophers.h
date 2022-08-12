@@ -6,7 +6,7 @@
 /*   By: blevrel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 17:38:49 by blevrel           #+#    #+#             */
-/*   Updated: 2022/08/11 16:24:03 by blevrel          ###   ########.fr       */
+/*   Updated: 2022/08/12 18:38:28 by blevrel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PHILOSOPHERS_H
@@ -32,7 +32,7 @@ typedef struct s_time
 	struct timeval	start;
 	struct timeval	end;
 	struct timeval	last_meal;
-	int				time_elapsed;
+	long int		time_elapsed;
 }				t_time;
 
 typedef struct s_all_philos
@@ -41,6 +41,7 @@ typedef struct s_all_philos
 	int				time_to_die;
 	int				time_to_eat;
 	pthread_mutex_t	msg_mutex;
+	pthread_mutex_t	time_mutex;
 	int				time_to_sleep;
 	int				nb_of_times_philo_must_eat;
 }				t_all_philos;
@@ -53,6 +54,7 @@ typedef struct s_indiv_data
 	int				own_fork;
 	int				neighbour_fork;
 	pthread_mutex_t	fork;
+	int				dead;
 	t_all_philos	global_data;
 	t_time			time;
 }				t_indiv_data;
@@ -67,9 +69,8 @@ void		init_struc(t_indiv_data *philos_data, long long *args);
 void		*start_routine(void *received_args);
 void		start_simulation(t_indiv_data *philos_data);
 void		get_time_and_print_it(t_indiv_data *philos_data);
-int			check_death(t_indiv_data *philos_data);
 int			check_nb_of_meals(t_indiv_data *philos_data);
-int			print_message(t_indiv_data *philos_data, int msg_to_print);
+int			check_death_and_print_message(t_indiv_data *philos_data, int msg_to_print);
 void		*print_error_msg(int msg_code);
 int			one_philo(t_indiv_data *philos_data);
 
