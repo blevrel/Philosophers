@@ -32,7 +32,6 @@ typedef struct s_time
 	struct timeval	start;
 	struct timeval	end;
 	struct timeval	last_meal;
-	long int		time_elapsed;
 }				t_time;
 
 typedef struct s_all_philos

@@ -24,7 +24,7 @@ void	*check_death(void *received_args)
 {
 	int				i;
 	t_indiv_data	*philos_data;
-	int				time_elapsed;
+	long int				time_elapsed;
 	struct timeval	end;
 
 	i = 0;
@@ -80,7 +80,6 @@ void	init_struc(t_indiv_data *philos_data, long long *args)
 		philos_data[i].own_fork = 0;
 		philos_data[i].neighbour_fork = 0;
 		philos_data[i].dead = 0;
-		philos_data[i].time.time_elapsed = 0;
 		pthread_mutex_init(&philos_data[i].fork, NULL);
 		i++;
 	}

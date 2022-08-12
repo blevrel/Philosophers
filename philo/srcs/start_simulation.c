@@ -46,12 +46,12 @@ int	eat_and_drop_forks(t_indiv_data *philos_data)
 {
 	if (check_death_and_print_message(philos_data, EAT) == 1)
 		return (1);
-	usleep(philos_data->global_data.time_to_eat * 1000);
 	pthread_mutex_lock(&philos_data[0 - (philos_data->philo_id - 1)]
 		.global_data.time_mutex);
 	gettimeofday(&philos_data->time.last_meal, NULL);
 	pthread_mutex_unlock(&philos_data[0 - (philos_data->philo_id - 1)]
 		.global_data.time_mutex);
+	usleep(philos_data->global_data.time_to_eat * 1000);
 	pthread_mutex_unlock(&philos_data->fork);
 	if (philos_data->philo_id
 		!= philos_data->global_data.nb_of_philosophers)
