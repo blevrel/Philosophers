@@ -6,7 +6,7 @@
 /*   By: blevrel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 17:38:49 by blevrel           #+#    #+#             */
-/*   Updated: 2022/08/12 18:38:28 by blevrel          ###   ########.fr       */
+/*   Updated: 2022/08/13 14:06:16 by blevrel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PHILOSOPHERS_H
@@ -14,7 +14,6 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <pthread.h>
-# include <string.h>
 # include <sys/time.h>
 # include <unistd.h>
 # define FORK 1
@@ -48,7 +47,6 @@ typedef struct s_all_philos
 typedef struct s_indiv_data
 {
 	int				nb_of_meals;
-	int				time_alive;
 	int				philo_id;
 	int				own_fork;
 	int				neighbour_fork;
@@ -58,19 +56,50 @@ typedef struct s_indiv_data
 	t_time			time;
 }				t_indiv_data;
 
+//starting_routines.c
+void		*start_routine(void *received_args);
+int			check_time_elapsed(long int time_elapsed, t_indiv_data *philos_data,
+				int i);
+void		*check_death(void *received_args);
+
+//check_nb_of_meals.c
+int			check_nb_of_meals(t_indiv_data *philos_data);
+
+//get_time.c
+void		get_time_and_print_it(t_indiv_data *philos_data);
+
+//one_philo.c
+int			one_philo(t_indiv_data *philos_data);
+
+//philosophers.c
+long long	*verify_args(int nb_args, char **args);
+long long	*char_tab_to_int_tab(char **args, int nb_args, int i);
+void		init_time_structure(t_indiv_data *philos_data, long long nb_philos);
+
+//philosophers_utils.c
 int			ft_str_is_numeric(char *str);
 long long	ft_atol(const char *nptr);
 int			ft_isint(long long nb);
-long long	*char_tab_to_int_tab(char **args, int nb_args, int i);
-void		start_threads(long long *args, int nb_args,
-				t_indiv_data *philos_data);
-void		init_struc(t_indiv_data *philos_data, long long *args);
-void		*start_routine(void *received_args);
-void		start_simulation(t_indiv_data *philos_data);
-void		get_time_and_print_it(t_indiv_data *philos_data);
-int			check_nb_of_meals(t_indiv_data *philos_data);
-int			check_death_and_print_message(t_indiv_data *philos_data, int msg_to_print);
+int			ft_strlen(char *str);
+
+//print_message.c
+void		display_message(t_indiv_data *philos_data, int msg_to_print);
+int			check_death_and_print_message(t_indiv_data *philos_data,
+				int msg_to_print);
 void		*print_error_msg(int msg_code);
-int			one_philo(t_indiv_data *philos_data);
+
+//start_simulation.c
+int			take_neighbour_fork(t_indiv_data *philos_data);
+int			take_forks(t_indiv_data *philos_data);
+int			eat_and_drop_forks(t_indiv_data *philos_data);
+int			ft_sleep(t_indiv_data *philos_data);
+void		start_simulation(t_indiv_data *philos_data);
+
+//start_threads.c
+void		init_threads(long long *args, int nb_args,
+				t_indiv_data *philos_data);
+void		start_threads(t_indiv_data *philos_data, pthread_t *death_checker,
+				pthread_t *id);
+void		init_struc(t_indiv_data *philos_data, long long *args);
 
 #endif

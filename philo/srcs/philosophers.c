@@ -6,7 +6,7 @@
 /*   By: blevrel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 08:50:41 by blevrel           #+#    #+#             */
-/*   Updated: 2022/08/12 14:41:56 by blevrel          ###   ########.fr       */
+/*   Updated: 2022/08/13 14:02:33 by blevrel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -25,6 +25,8 @@ long long	*verify_args(int nb_args, char **args)
 			return (print_error_msg(NEG));
 		else if (args[i][0] == '\0')
 			return (print_error_msg(EMPTY));
+		else if (ft_strlen(args[i]) > 10)
+			return (print_error_msg(NOT_VALID));
 		i++;
 	}
 	i = 1;
@@ -84,17 +86,15 @@ int	main(int argc, char **argv)
 		print_error_msg(ARGC);
 		return (-1);
 	}
-	philos_data = malloc(sizeof(t_indiv_data) * ft_atol(argv[1]));
-	if (philos_data == NULL)
-		return (-1);
 	args = verify_args(argc, argv);
 	if (args == NULL)
-	{
-		free(philos_data);
 		return (-1);
-	}
+	philos_data = malloc(sizeof(t_indiv_data) * args[0]);
+	if (philos_data == NULL)
+		return (-1);
 	init_time_structure(philos_data, args[0]);
-	start_threads(args, argc - 1, philos_data);
+	init_threads(args, argc - 1, philos_data);
 	free(philos_data);
+	free(args);
 	return (0);
 }

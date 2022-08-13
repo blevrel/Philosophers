@@ -6,7 +6,7 @@
 #    By: blevrel <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/21 10:32:08 by blevrel           #+#    #+#              #
-#    Updated: 2022/08/12 13:40:16 by blevrel          ###   ########.fr        #
+#    Updated: 2022/08/13 12:32:30 by blevrel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ NAME = philo
 
 SRCS =	srcs/philosophers.c \
 		srcs/philosophers_utils.c \
+		srcs/starting_routines.c \
 		srcs/start_threads.c \
 		srcs/start_simulation.c \
 		srcs/get_time.c \
